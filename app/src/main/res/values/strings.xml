@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">TaskTracker</string>
+    <string name="tasks">Tasks</string>
+    <string name="notes">Notes</string>
+    <string name="settings">Settings</string>
+
+    <!-- Common Errors -->
+    <string name="no_network_error">No network available. Please check your connection</string>
+    <string name="internal_error">Internal error. Please try again later</string>
+    <string name="feature_does_not_support">This feature does not support yet</string>
+
+    <!-- Login screen -->
+    <string name="welcome">Welcome!</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_up">Don\'t have an account? Sign Up!</string>
+    <string name="credentials_error">Username or password are not correct</string>
+    <string name="username_length_error">Username must be more than %d chars and less then %d chars</string>
+    <string name="password_length_error">Password must be more than %d chars and less then %d chars</string>
+
+    <!-- Register screen -->
+    <string name="registration">Registration</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up_button">Sign Up</string>
+    <string name="passwords_do_not_match">Confirmed password doesn\'t match</string>
+    <string name="email_incorrect">Enter valid email address</string>
+    <string name="username_already_found">Username already found. Please choose new username</string>
+
+    <!-- Tasks -->
+    <string name="add_task_description">Add Task</string>
+
+    <!-- Add Task -->
+    <string name="new_task">New Task</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="create_task">Create</string>
+    <string name="title_empty_error">Title cannot be empty</string>
+
+    <!-- Edit Task -->
+    <string name="edit_task">Edit Task</string>
+    <string name="delete_task">Delete</string>
+    <string name="update_task">Update</string>
+    <string name="cancel_edit_task">Cancel</string>
+</resources>
