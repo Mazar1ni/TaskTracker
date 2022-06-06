@@ -4,7 +4,7 @@ import com.github.mazar1ni.tasktracker.core.util.NetworkResultType
 import com.github.mazar1ni.tasktracker.core.util.preferences.ApplicationPreferences
 import com.github.mazar1ni.tasktracker.core.util.preferences.PreferencesType
 import com.github.mazar1ni.tasktracker.tasks.domain.repository.TasksRepository
-import com.github.mazar1ni.tasktracker.tasks.domain.states.GetTasksState
+import com.github.mazar1ni.tasktracker.tasks.domain.states.TasksState
 import javax.inject.Inject
 
 class SyncTasksUseCase @Inject constructor(
@@ -12,7 +12,7 @@ class SyncTasksUseCase @Inject constructor(
     private val applicationPreferences: ApplicationPreferences
 ) {
 
-    suspend operator fun invoke(force: Boolean): GetTasksState {
+    suspend operator fun invoke(force: Boolean): TasksState {
         val lastUpdateTasks = applicationPreferences.getLong(PreferencesType.LastUpdateTasks)
         return if (lastUpdateTasks == null)
             getAllTasks()
@@ -23,7 +23,7 @@ class SyncTasksUseCase @Inject constructor(
             getTasksFromDB(lastUpdateTasks)
     }
 
-    private suspend fun getAllTasks(): GetTasksState {
+    private suspend fun getAllTasks(): TasksState {
         val result = tasksRepository.getAll()
         if (result.networkResultType == NetworkResultType.Success) {
             applicationPreferences.setLong(
@@ -32,17 +32,17 @@ class SyncTasksUseCase @Inject constructor(
             )
 
             if (result.data == null || result.data.isEmpty())
-                GetTasksState.GetTasksSuccess()
+                TasksState.TasksSuccess()
             else {
                 tasksRepository.saveTasksToDB(result.data)
-                GetTasksState.GetTasksSuccess()
+                TasksState.TasksSuccess()
             }
         }
 
         return getTasksFromDB(null)
     }
 
-    private suspend fun getTasksFromDB(lastUpdateTasks: Long?): GetTasksState {
+    private suspend fun getTasksFromDB(lastUpdateTasks: Long?): TasksState {
         val result = tasksRepository.getAllTasksFromDB()
         val deleteTasksList = tasksRepository.getAllDeleteTasksFromDB()
 
@@ -56,9 +56,9 @@ class SyncTasksUseCase @Inject constructor(
         }
 
         return if (result == null || result.isEmpty())
-            GetTasksState.GetTasksListEmpty
+            TasksState.TasksListEmpty
         else
-            GetTasksState.GetTasksSuccess(result)
+            TasksState.TasksSuccess(result)
     }
 
     private suspend fun syncTasksUseCase() {

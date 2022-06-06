@@ -14,6 +14,8 @@ data class TasksEntity(
     val uuid: String,
     @ColumnInfo(name = TIMESTAMP_FIELD_NAME)
     val timestamp: Long,
+    @ColumnInfo(name = "completed")
+    val isCompleted: Boolean,
     @ColumnInfo(name = "synchronized")
     var isSynchronized: Boolean = false
 ) : BaseEntity() {

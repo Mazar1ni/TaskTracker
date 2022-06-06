@@ -1,5 +1,6 @@
 package com.github.mazar1ni.tasktracker.tasks.domain.models
 
+import androidx.room.ColumnInfo
 import com.google.gson.annotations.SerializedName
 
 data class TaskDomainModel(
@@ -11,6 +12,8 @@ data class TaskDomainModel(
     val uuid: String,
     @SerializedName("timestamp")
     var timestamp: Long,
+    @ColumnInfo(name = "completed")
+    var isCompleted: Boolean = false,
     @SerializedName("synchronized")
     var synchronized: Boolean = false,
     @SerializedName("id")

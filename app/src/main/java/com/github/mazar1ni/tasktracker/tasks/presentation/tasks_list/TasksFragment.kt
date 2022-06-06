@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mazar1ni.tasktracker.R
 import com.github.mazar1ni.tasktracker.core.util.NavigationUtil
 import com.github.mazar1ni.tasktracker.databinding.FragmentTasksBinding
-import com.github.mazar1ni.tasktracker.tasks.domain.states.GetTasksState
+import com.github.mazar1ni.tasktracker.tasks.domain.states.TasksState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -24,7 +24,7 @@ class TasksFragment : Fragment() {
     @Inject
     lateinit var navigationUtil: NavigationUtil
 
-    private val taskListAdapter = TaskListAdapter()
+    private val taskListAdapter by lazy { TaskListAdapter(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,31 +54,41 @@ class TasksFragment : Fragment() {
             )
         }
 
+        taskListAdapter.doneAction = { taskId, isChecked ->
+            viewModel.completeTask(taskId, isChecked)
+        }
+
         viewModel.stateAction = { state ->
             when (state) {
-                GetTasksState.GetTasksInProgress -> {
+                TasksState.TasksInProgress -> {
                     binding.refreshLayout.isRefreshing = true
                 }
-                GetTasksState.GetTasksListEmpty -> {
+                TasksState.TasksListEmpty -> {
                     binding.refreshLayout.isRefreshing = false
                     taskListAdapter.add(listOf())
                     // TODO: show icon that no tasks today
                 }
-                GetTasksState.GetTasksNetworkConnectionError -> {
+                TasksState.TasksNetworkConnectionError -> {
                     binding.refreshLayout.isRefreshing = false
                     view?.let {
                         Snackbar.make(it, R.string.no_network_error, Snackbar.LENGTH_SHORT).show()
                     }
                 }
-                GetTasksState.GetTasksInternalError -> {
+                TasksState.TasksInternalError -> {
                     binding.refreshLayout.isRefreshing = false
                     view?.let {
                         Snackbar.make(it, R.string.internal_error, Snackbar.LENGTH_SHORT).show()
                     }
                 }
-                is GetTasksState.GetTasksSuccess -> {
+                is TasksState.TasksSuccess -> {
                     binding.refreshLayout.isRefreshing = false
-                    state.tasks?.let { taskListAdapter.add(it) }
+                    state.tasks?.let {
+                        taskListAdapter.add(it.sortedBy { task -> task.isCompleted })
+                    }
+                }
+                TasksState.TasksCompletedSuccess -> {
+                    binding.refreshLayout.isRefreshing = false
+                    viewModel.updateListTasks()
                 }
             }
         }
