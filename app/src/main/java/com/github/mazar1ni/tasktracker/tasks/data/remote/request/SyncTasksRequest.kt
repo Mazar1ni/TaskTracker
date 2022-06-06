@@ -6,7 +6,9 @@ import com.google.gson.annotations.SerializedName
 
 data class SyncTasksRequest(
     @SerializedName("tasks")
-    val taskDtos: List<TaskDto>?,
+    val tasks: List<TaskDto>?,
     @SerializedName("deleted_tasks_uuid")
-    val deletedTasksUUID: List<DeletedTaskDto>?
+    val deletedTasksUUID: List<DeletedTaskDto>?,
+    @SerializedName("last_update_timestamp")
+    val lastUpdateTimestamp: Long?
 )

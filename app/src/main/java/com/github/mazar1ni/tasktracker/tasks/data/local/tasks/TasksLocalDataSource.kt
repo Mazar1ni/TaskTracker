@@ -17,4 +17,9 @@ class TasksLocalDataSource(private val tasksDao: TasksDao) :
             if (tasksUUID.isNotEmpty())
                 tasksDao.deleteTasksIfNotPresentInList(tasksUUID)
         }
+
+    suspend fun insertWithoutId(task: TasksEntity) =
+        withContext(Dispatchers.IO) {
+            tasksDao.insertWithoutId(task)
+        }
 }

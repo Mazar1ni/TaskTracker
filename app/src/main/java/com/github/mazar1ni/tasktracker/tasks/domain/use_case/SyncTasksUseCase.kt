@@ -17,7 +17,7 @@ class SyncTasksUseCase @Inject constructor(
         return if (lastUpdateTasks == null)
             getAllTasks()
         else if (force || System.currentTimeMillis() - lastUpdateTasks >= 3600000) {
-            syncTasksUseCase()
+            syncTasks()
             getTasksFromDB(lastUpdateTasks)
         } else
             getTasksFromDB(lastUpdateTasks)
@@ -43,16 +43,21 @@ class SyncTasksUseCase @Inject constructor(
     }
 
     private suspend fun getTasksFromDB(lastUpdateTasks: Long?): TasksState {
-        val result = tasksRepository.getAllTasksFromDB()
+        var result = tasksRepository.getAllTasksFromDB()
         val deleteTasksList = tasksRepository.getAllDeleteTasksFromDB()
 
-        if (lastUpdateTasks == null) {
-            syncTasksUseCase()
+        val needUpdateAllListInUI = if (lastUpdateTasks == null) {
+            syncTasks()
         } else {
             if (result?.find { it.timestamp > lastUpdateTasks } != null ||
                 !deleteTasksList.isNullOrEmpty()) {
-                syncTasksUseCase()
-            }
+                syncTasks()
+            } else
+                false
+        }
+
+        if (needUpdateAllListInUI) {
+            result = tasksRepository.getAllTasksFromDB()
         }
 
         return if (result == null || result.isEmpty())
@@ -61,7 +66,7 @@ class SyncTasksUseCase @Inject constructor(
             TasksState.TasksSuccess(result)
     }
 
-    private suspend fun syncTasksUseCase() {
+    private suspend fun syncTasks(): Boolean {
         val lastUpdateTimestamp =
             applicationPreferences.getLong(PreferencesType.LastUpdateTasks)
 
@@ -74,9 +79,10 @@ class SyncTasksUseCase @Inject constructor(
         val needSyncDeleteTasks = tasksRepository.getAllDeleteTasksFromDB() ?: listOf()
 
         if (needSyncTasks.isEmpty() && needSyncDeleteTasks.isEmpty())
-            return
+            return false
 
-        val result = tasksRepository.syncTasks(needSyncTasks, needSyncDeleteTasks)
+        val result =
+            tasksRepository.syncTasks(needSyncTasks, needSyncDeleteTasks, lastUpdateTimestamp)
 
         needSyncTasks.forEach {
             it.synchronized = true
@@ -92,6 +98,12 @@ class SyncTasksUseCase @Inject constructor(
                 tasksRepository.deleteTasksIfNotPresentInList(it)
         }
 
+        val needUpdateAllListInUI = result.data?.updatedTasks?.isNotEmpty() ?: false
+
+        result.data?.updatedTasks?.forEach { it ->
+            tasksRepository.updateTaskWithoutId(it)
+        }
+
         // TODO: request not found tasks
 
         when (result.networkResultType) {
@@ -103,5 +115,7 @@ class SyncTasksUseCase @Inject constructor(
                 // TODO: add logs
             }
         }
+
+        return needUpdateAllListInUI
     }
 }

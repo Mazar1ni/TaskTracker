@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.github.mazar1ni.tasktracker.R
 import com.github.mazar1ni.tasktracker.databinding.TaskViewBinding
 import com.github.mazar1ni.tasktracker.tasks.domain.models.TaskDomainModel
 

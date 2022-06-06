@@ -10,8 +10,8 @@ import com.github.mazar1ni.tasktracker.tasks.data.mappers.DeletedTaskMapper
 import com.github.mazar1ni.tasktracker.tasks.data.mappers.TaskMapper
 import com.github.mazar1ni.tasktracker.tasks.data.remote.TasksApi
 import com.github.mazar1ni.tasktracker.tasks.data.remote.request.SyncTasksRequest
-import com.github.mazar1ni.tasktracker.tasks.data.remote.response.SyncTasksResponse
 import com.github.mazar1ni.tasktracker.tasks.domain.models.DeletedTaskDomainModel
+import com.github.mazar1ni.tasktracker.tasks.domain.models.SyncTasksResponseModel
 import com.github.mazar1ni.tasktracker.tasks.domain.models.TaskDomainModel
 import com.github.mazar1ni.tasktracker.tasks.domain.repository.TasksRepository
 
@@ -45,20 +45,28 @@ class TasksRepositoryImpl(
 
     override suspend fun syncTasks(
         tasks: List<TaskDomainModel>,
-        deletedTasksUUID: List<DeletedTaskDomainModel>
-    ): NetworkResult<SyncTasksResponse> =
+        deletedTasksUUID: List<DeletedTaskDomainModel>,
+        lastUpdateTimestamp: Long?
+    ): NetworkResult<SyncTasksResponseModel> =
         try {
             val result =
                 tasksApi.syncTasks(
                     "Bearer ${applicationPreferences.getString(PreferencesType.AccessToken)}",
                     SyncTasksRequest(
                         tasks.map { TaskMapper.domainToDto(it) },
-                        deletedTasksUUID.map { DeletedTaskMapper.domainToDto(it) })
+                        deletedTasksUUID.map { DeletedTaskMapper.domainToDto(it) },
+                        lastUpdateTimestamp
+                    )
                 )
 
             when (result.status) {
                 402 -> NetworkResult(NetworkResultType.UsernameAlreadyFound)
-                200 -> NetworkResult(NetworkResultType.Success, result.data)
+                200 -> NetworkResult(
+                    NetworkResultType.Success,
+                    SyncTasksResponseModel(
+                        result.data?.uuidAllTasks,
+                        result.data?.updatedTasks?.map { TaskMapper.dtoToDomain(it) })
+                )
                 else -> NetworkResult(NetworkResultType.InternalError)
             }
         } catch (exception: Exception) {
@@ -100,6 +108,10 @@ class TasksRepositoryImpl(
 
     override suspend fun updateTasks(tasks: List<TaskDomainModel>) {
         tasksLocalDataSource.insertList(tasks.map { TaskMapper.domainToEntity(it) })
+    }
+
+    override suspend fun updateTaskWithoutId(task: TaskDomainModel) {
+        tasksLocalDataSource.insertWithoutId(TaskMapper.domainToEntity(task))
     }
 
     override suspend fun getTaskByUUID(id: Int): TaskDomainModel? {

@@ -1,8 +1,8 @@
 package com.github.mazar1ni.tasktracker.tasks.domain.repository
 
 import com.github.mazar1ni.tasktracker.core.NetworkResult
-import com.github.mazar1ni.tasktracker.tasks.data.remote.response.SyncTasksResponse
 import com.github.mazar1ni.tasktracker.tasks.domain.models.DeletedTaskDomainModel
+import com.github.mazar1ni.tasktracker.tasks.domain.models.SyncTasksResponseModel
 import com.github.mazar1ni.tasktracker.tasks.domain.models.TaskDomainModel
 
 interface TasksRepository {
@@ -11,8 +11,9 @@ interface TasksRepository {
 
     suspend fun syncTasks(
         tasks: List<TaskDomainModel>,
-        deletedTasksUUID: List<DeletedTaskDomainModel>
-    ): NetworkResult<SyncTasksResponse>
+        deletedTasksUUID: List<DeletedTaskDomainModel>,
+        lastUpdateTimestamp: Long?
+    ): NetworkResult<SyncTasksResponseModel>
 
     suspend fun saveTasksToDB(tasks: List<TaskDomainModel>)
 
@@ -31,6 +32,8 @@ interface TasksRepository {
     suspend fun updateTask(task: TaskDomainModel)
 
     suspend fun updateTasks(tasks: List<TaskDomainModel>)
+
+    suspend fun updateTaskWithoutId(task: TaskDomainModel)
 
     suspend fun getTaskByUUID(id: Int): TaskDomainModel?
 
