@@ -60,15 +60,6 @@
         android:text="@string/update_task" />
 
     <Button
-        android:id="@+id/cancelEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:text="@string/cancel_edit_task"
-        style="@style/Widget.MaterialComponents.Button.TextButton" />
-
-    <Button
         android:id="@+id/deleteTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

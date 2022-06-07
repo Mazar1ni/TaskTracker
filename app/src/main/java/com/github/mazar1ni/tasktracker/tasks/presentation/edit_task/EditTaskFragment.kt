@@ -40,10 +40,6 @@ class EditTaskFragment : Fragment() {
             viewModel.deleteTask()
         }
 
-        binding.cancelEdit.setOnClickListener {
-            navigationUtil.popBackStack()
-        }
-
         binding.updateTask.setOnClickListener {
             if (editTaskState == null || editTaskState !is EditTaskState.EditTaskStateSuccess)
                 viewModel.saveEditTask()
