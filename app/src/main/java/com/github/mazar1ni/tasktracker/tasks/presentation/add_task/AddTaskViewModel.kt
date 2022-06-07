@@ -1,7 +1,5 @@
 package com.github.mazar1ni.tasktracker.tasks.presentation.add_task
 
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mazar1ni.tasktracker.tasks.domain.states.AddTaskState
@@ -15,28 +13,8 @@ class AddTaskViewModel @Inject constructor(
     private val createTaskUseCase: CreateTaskUseCase,
 ) : ViewModel() {
 
-    private var title = ""
-    private var description = ""
-
-    val titleWatcher: TextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun afterTextChanged(text: Editable?) {
-            title = text.toString()
-        }
-    }
-
-    val descriptionWatcher: TextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-        override fun afterTextChanged(text: Editable?) {
-            description = text.toString()
-        }
-    }
+    var title = ""
+    var description = ""
 
     var stateAction: ((AddTaskState) -> Unit)? = null
 

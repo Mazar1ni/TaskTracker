@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.github.mazar1ni.tasktracker.R
@@ -28,10 +29,6 @@ class RegisterFragment : Fragment() {
     @Inject
     lateinit var navigationUtil: NavigationUtil
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,10 +36,22 @@ class RegisterFragment : Fragment() {
     ): View {
         binding = FragmentRegisterBinding.inflate(layoutInflater)
 
-        binding.usernameEditText.addTextChangedListener(viewModel.usernameWatcher)
-        binding.emailEditText.addTextChangedListener(viewModel.emailWatcher)
-        binding.passwordEditText.addTextChangedListener(viewModel.passwordWatcher)
-        binding.confirmPasswordEditText.addTextChangedListener(viewModel.confirmPasswordWatcher)
+        binding.usernameEditText.addTextChangedListener {
+            clearErrorFields()
+            viewModel.username = it.toString()
+        }
+        binding.emailEditText.addTextChangedListener {
+            clearErrorFields()
+            viewModel.email = it.toString()
+        }
+        binding.passwordEditText.addTextChangedListener {
+            clearErrorFields()
+            viewModel.password = it.toString()
+        }
+        binding.confirmPasswordEditText.addTextChangedListener {
+            clearErrorFields()
+            viewModel.confirmPassword = it.toString()
+        }
 
         binding.signUp.setOnClickListener { viewModel.register() }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.github.mazar1ni.tasktracker.R
@@ -29,15 +30,21 @@ class AddTaskFragment : Fragment() {
     ): View {
         binding = FragmentAddTaskBinding.inflate(inflater)
 
-        binding.titleEditText.addTextChangedListener(viewModel.titleWatcher)
-        binding.descriptionEditText.addTextChangedListener(viewModel.descriptionWatcher)
+        binding.titleEditText.addTextChangedListener {
+            clearErrorFields()
+            viewModel.title = it.toString()
+        }
+
+        binding.descriptionEditText.addTextChangedListener {
+            viewModel.description = it.toString()
+        }
 
         binding.createTask.setOnClickListener {
             viewModel.createTask()
         }
 
         viewModel.stateAction = { state ->
-            binding.titleField.error = null
+            clearErrorFields()
 
             when (state) {
                 AddTaskState.AddTaskStateInProgress -> {
@@ -54,5 +61,9 @@ class AddTaskFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun clearErrorFields() {
+        binding.titleField.error = null
     }
 }
