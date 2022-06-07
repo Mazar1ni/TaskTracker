@@ -12,14 +12,17 @@ class TasksLocalDataSource(private val tasksDao: TasksDao) :
             tasksDao.getAllWithNewerTimestamp(timestamp)
         }
 
-    suspend fun deleteTasksIfNotPresentInList(tasksUUID: List<String>) =
+    suspend fun deleteTasksIfNotPresentInList(tasksUUID: List<String>): Int =
         withContext(Dispatchers.IO) {
             if (tasksUUID.isNotEmpty())
-                tasksDao.deleteTasksIfNotPresentInList(tasksUUID)
+                return@withContext tasksDao.deleteTasksIfNotPresentInList(tasksUUID)
+            else
+                return@withContext 0
         }
 
-    suspend fun insertWithoutId(task: TasksEntity) =
+    suspend fun insertOrReplaceWithoutId(tasks: List<TasksEntity>) =
         withContext(Dispatchers.IO) {
-            tasksDao.insertWithoutId(task)
+            if (tasks.isNotEmpty())
+                tasksDao.insertOrReplaceWithoutId(tasks)
         }
 }

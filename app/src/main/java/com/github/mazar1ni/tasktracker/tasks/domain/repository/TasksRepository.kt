@@ -21,7 +21,7 @@ interface TasksRepository {
 
     suspend fun getAllTasksNewerTimestampFromDB(timestamp: Long): List<TaskDomainModel>?
 
-    suspend fun deleteTasksIfNotPresentInList(tasksUUID: List<String>)
+    suspend fun deleteTasksIfNotPresentInList(tasksUUID: List<String>): Int
 
     suspend fun createTask(task: TaskDomainModel)
 
@@ -33,7 +33,7 @@ interface TasksRepository {
 
     suspend fun updateTasks(tasks: List<TaskDomainModel>)
 
-    suspend fun updateTaskWithoutId(task: TaskDomainModel)
+    suspend fun updateTaskWithoutId(tasks: List<TaskDomainModel>)
 
     suspend fun getTaskByUUID(id: Int): TaskDomainModel?
 

@@ -86,8 +86,8 @@ class TasksRepositoryImpl(
             ?.map { TaskMapper.entityToDomain(it) }
     }
 
-    override suspend fun deleteTasksIfNotPresentInList(tasksUUID: List<String>) {
-        tasksLocalDataSource.deleteTasksIfNotPresentInList(tasksUUID)
+    override suspend fun deleteTasksIfNotPresentInList(tasksUUID: List<String>): Int {
+        return tasksLocalDataSource.deleteTasksIfNotPresentInList(tasksUUID)
     }
 
     override suspend fun createTask(task: TaskDomainModel) {
@@ -110,8 +110,8 @@ class TasksRepositoryImpl(
         tasksLocalDataSource.insertList(tasks.map { TaskMapper.domainToEntity(it) })
     }
 
-    override suspend fun updateTaskWithoutId(task: TaskDomainModel) {
-        tasksLocalDataSource.insertWithoutId(TaskMapper.domainToEntity(task))
+    override suspend fun updateTaskWithoutId(tasks: List<TaskDomainModel>) {
+        tasksLocalDataSource.insertOrReplaceWithoutId(tasks.map { TaskMapper.domainToEntity(it) })
     }
 
     override suspend fun getTaskByUUID(id: Int): TaskDomainModel? {

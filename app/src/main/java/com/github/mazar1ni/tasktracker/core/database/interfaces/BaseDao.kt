@@ -34,4 +34,7 @@ abstract class BaseDao<T>(protected val tableName: String) {
 
     @RawQuery
     protected abstract fun rawQueryOneItem(query: SupportSQLiteQuery): T?
+
+    @RawQuery
+    protected abstract fun rawQueryCount(query: SupportSQLiteQuery): Int
 }
