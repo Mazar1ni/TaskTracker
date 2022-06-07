@@ -3,6 +3,7 @@ package com.github.mazar1ni.tasktracker.auth.domain.use_case
 import com.github.mazar1ni.tasktracker.auth.domain.repository.AuthRepository
 import com.github.mazar1ni.tasktracker.auth.domain.states.LoginState
 import com.github.mazar1ni.tasktracker.core.util.NetworkResultType
+import com.github.mazar1ni.tasktracker.core.util.Utils.generateMD5
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(private val authRepository: AuthRepository) {
@@ -20,7 +21,7 @@ class LoginUseCase @Inject constructor(private val authRepository: AuthRepositor
         if (password.length < MIN_CREDENTIAL_LENGTH || password.length > MAX_CREDENTIAL_LENGTH)
             return LoginState.LoginPasswordLength
 
-        return when (authRepository.login(username, password)) {
+        return when (authRepository.login(username, password.generateMD5())) {
             NetworkResultType.InternalError -> LoginState.LoginInternalError
             NetworkResultType.NoNetworkConnectivity -> LoginState.LoginNetworkConnectionError
             NetworkResultType.CredentialsIncorrect -> LoginState.LoginIncorrectCredentials

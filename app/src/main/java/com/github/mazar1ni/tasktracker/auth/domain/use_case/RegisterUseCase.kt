@@ -3,6 +3,7 @@ package com.github.mazar1ni.tasktracker.auth.domain.use_case
 import com.github.mazar1ni.tasktracker.auth.domain.repository.AuthRepository
 import com.github.mazar1ni.tasktracker.auth.domain.states.RegisterState
 import com.github.mazar1ni.tasktracker.core.util.NetworkResultType
+import com.github.mazar1ni.tasktracker.core.util.Utils.generateMD5
 import javax.inject.Inject
 
 class RegisterUseCase @Inject constructor(private val authRepository: AuthRepository) {
@@ -34,7 +35,7 @@ class RegisterUseCase @Inject constructor(private val authRepository: AuthReposi
         if (password != confirmPassword)
             return RegisterState.RegisterPasswordsDoNotMatch
 
-        return when (authRepository.register(email, username, password)) {
+        return when (authRepository.register(email, username, password.generateMD5())) {
             NetworkResultType.InternalError -> RegisterState.RegisterInternalError
             NetworkResultType.NoNetworkConnectivity -> RegisterState.RegisterNetworkConnectionError
             NetworkResultType.UsernameAlreadyFound -> RegisterState.RegisterUsernameAlreadyFound
