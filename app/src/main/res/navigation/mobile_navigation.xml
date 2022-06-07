@@ -62,12 +62,12 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.github.mazar1ni.tasktracker.ui.dashboard.DashboardFragment"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_notes"
+        android:name="com.github.mazar1ni.tasktracker.notes.presentation.NotesFragment"
+        tools:layout="@layout/fragment_notes" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.github.mazar1ni.tasktracker.ui.notifications.NotificationsFragment"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_settings"
+        android:name="com.github.mazar1ni.tasktracker.settings.presentation.SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

@@ -37,6 +37,16 @@ android {
     }
 }
 
+ext {
+    androidxLifecycle = '2.4.1'
+    androidxNavigation = '2.4.2'
+    hilt = '2.42'
+    retrofit = '2.9.0'
+    gson = '1.8.4'
+    room = '2.4.2'
+    encryptedSharedPrefs = '1.1.0-alpha03'
+}
+
 dependencies {
 
     // Init
@@ -46,36 +56,33 @@ dependencies {
 
     // UI
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxLifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidxLifecycle"
+    implementation "androidx.navigation:navigation-fragment-ktx:$androidxNavigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$androidxNavigation"
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    implementation "com.google.dagger:hilt-android:$hilt"
+    kapt "com.google.dagger:hilt-compiler:$hilt"
 
     // Splash screen
     implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
 
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-
     // Gson
-    implementation 'io.gsonfire:gson-fire:1.8.4'
+    implementation "io.gsonfire:gson-fire:$gson"
 
     // Encrypted shared preferences
-    implementation 'androidx.security:security-crypto:1.0.0'
-    implementation 'androidx.security:security-crypto-ktx:1.1.0-alpha03'
+    implementation "androidx.security:security-crypto:$encryptedSharedPrefs"
+    implementation "androidx.security:security-crypto-ktx:$encryptedSharedPrefs"
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
 
     // Room
-    implementation "androidx.room:room-ktx:2.4.2"
-    kapt "androidx.room:room-compiler:2.4.2"
+    implementation "androidx.room:room-ktx:$room"
+    kapt "androidx.room:room-compiler:$room"
 
     // Cipher SQLite
     implementation "net.zetetic:android-database-sqlcipher:4.5.1"

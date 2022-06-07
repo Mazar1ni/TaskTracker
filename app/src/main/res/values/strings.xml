@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">TaskTracker</string>
+    <string name="app_name">Task Tracker</string>
     <string name="tasks">Tasks</string>
     <string name="notes">Notes</string>
     <string name="settings">Settings</string>
+
+    <string name="screen_does_not_implement_yet">This screen does not implement yet!</string>
 
     <!-- Common Errors -->
     <string name="no_network_error">No network available. Please check your connection</string>

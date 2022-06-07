@@ -1,7 +1,6 @@
-package com.github.mazar1ni.tasktracker
+package com.github.mazar1ni.tasktracker.core
 
 import android.app.Application
-import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -11,8 +10,8 @@ class App : Application() {
         // TODO: Log
         super.onCreate()
 
-        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-            Log.e("tasktracker", "${throwable.localizedMessage}\n${throwable.stackTraceToString()}")
+        Thread.setDefaultUncaughtExceptionHandler { _, _ ->
+            // TODO: Log
         }
     }
 

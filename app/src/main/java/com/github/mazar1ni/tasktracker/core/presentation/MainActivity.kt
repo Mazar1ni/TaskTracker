@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.navigation_tasks -> navView.visibility = View.VISIBLE
-                R.id.navigation_dashboard -> navView.visibility = View.VISIBLE
-                R.id.navigation_notifications -> navView.visibility = View.VISIBLE
+                R.id.navigation_notes -> navView.visibility = View.VISIBLE
+                R.id.navigation_settings -> navView.visibility = View.VISIBLE
                 else -> navView.visibility = View.GONE
             }
         }
