@@ -8,6 +8,10 @@ data class TaskDomainModel(
     var title: String,
     @SerializedName("description")
     var description: String,
+    @SerializedName("due_date")
+    var dueDate: Long?,
+    @SerializedName("has_time")
+    var hasTime: Boolean,
     @SerializedName("uuid")
     val uuid: String,
     @SerializedName("timestamp")
@@ -15,7 +19,7 @@ data class TaskDomainModel(
     @ColumnInfo(name = "completed")
     var isCompleted: Boolean = false,
     @SerializedName("synchronized")
-    var synchronized: Boolean = false,
+    var isSynchronized: Boolean = false,
     @SerializedName("id")
     val id: Int? = null
 )

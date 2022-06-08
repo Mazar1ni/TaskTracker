@@ -107,7 +107,7 @@ class SyncTasksUseCase @Inject constructor(
     ): Boolean {
 
         needSyncTasks.forEach {
-            it.synchronized = true
+            it.isSynchronized = true
         }
 
         tasksRepository.updateTasks(needSyncTasks)

@@ -9,14 +9,15 @@ object DeletedTaskMapper {
     fun entityToDomain(deletedTasksEntity: DeletedTasksEntity) =
         DeletedTaskDomainModel(
             deletedTasksEntity.uuid,
-            deletedTasksEntity.timestamp
+            deletedTasksEntity.timestamp,
+            deletedTasksEntity.id
         )
 
     fun domainToEntity(deletedTaskDomainModel: DeletedTaskDomainModel) =
         DeletedTasksEntity(
             deletedTaskDomainModel.uuid,
             deletedTaskDomainModel.timestamp
-        )
+        ).apply { id = deletedTaskDomainModel.id }
 
     fun dtoToDomain(deletedTaskDto: DeletedTaskDto) =
         DeletedTaskDomainModel(

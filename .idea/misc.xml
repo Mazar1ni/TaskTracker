@@ -4,7 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.213" />
+        <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic__669476_add_circle_ic_icon.xml" value="0.213" />
+        <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic__material_clear.xml" value="0.213" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic_add_24dp.xml" value="0.268" />
+        <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic_check.xml" value="0.2705" />
+        <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic_clear.xml" value="0.212" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.213" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.213" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.213" />
@@ -14,6 +18,7 @@
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/logo.xml" value="0.213" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/activity_main.xml" value="0.24954710144927536" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/all_tasks_view.xml" value="0.2630208333333333" />
+        <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/date_picker_view.xml" value="0.20572916666666666" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_add_task.xml" value="0.2640625" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_dashboard.xml" value="0.27291666666666664" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_edit_task.xml" value="0.203125" />
@@ -27,6 +32,7 @@
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/task_view.xml" value="0.5" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18802083333333333" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.196" />
+        <entry key="..\:/Users/xmaza/.gradle/caches/transforms-3/b22b114a82506e8585e5674e742ddfbc/transformed/appcompat-1.4.1/res/drawable/abc_ic_clear_material.xml" value="0.213" />
       </map>
     </option>
   </component>

@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:contentDescription="@string/add_task_description"
+            tools:ignore="ContentDescription"
             android:foregroundGravity="bottom|right"
             app:srcCompat="@drawable/ic_plus_24" />
 

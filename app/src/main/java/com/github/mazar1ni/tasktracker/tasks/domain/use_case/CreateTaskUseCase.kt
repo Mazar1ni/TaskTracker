@@ -10,7 +10,12 @@ class CreateTaskUseCase @Inject constructor(
     private val tasksRepository: TasksRepository
 ) {
 
-    suspend operator fun invoke(title: String, description: String): AddTaskState {
+    suspend operator fun invoke(
+        title: String,
+        description: String,
+        dueDate: Long?,
+        hasTime: Boolean
+    ): AddTaskState {
 
         if (title.isEmpty())
             return AddTaskState.AddTaskStateEmptyTitle
@@ -19,6 +24,8 @@ class CreateTaskUseCase @Inject constructor(
             TaskDomainModel(
                 title,
                 description,
+                dueDate,
+                hasTime,
                 UUID.randomUUID().toString(),
                 System.currentTimeMillis()
             )

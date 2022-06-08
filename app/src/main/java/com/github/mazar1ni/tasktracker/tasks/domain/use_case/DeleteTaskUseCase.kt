@@ -12,7 +12,7 @@ class DeleteTaskUseCase @Inject constructor(
     suspend operator fun invoke(taskDomainModel: TaskDomainModel) {
         tasksRepository.deleteTask(taskDomainModel)
 
-        if (taskDomainModel.synchronized) {
+        if (taskDomainModel.isSynchronized) {
             tasksRepository.addDeleteTasksToDB(
                 DeletedTaskDomainModel(
                     taskDomainModel.uuid,

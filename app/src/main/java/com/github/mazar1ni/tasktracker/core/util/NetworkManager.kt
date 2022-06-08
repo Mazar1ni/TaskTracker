@@ -13,6 +13,7 @@ object NetworkManager {
 
         val gson = GsonFireBuilder()
             .createGsonBuilder()
+            .serializeNulls()
             .setLenient()
             .create()
 

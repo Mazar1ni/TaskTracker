@@ -6,5 +6,7 @@ data class DeletedTaskDomainModel(
     @SerializedName("uuid")
     val uuid: String,
     @SerializedName("timestamp")
-    val timestamp: Long
+    val timestamp: Long,
+    @SerializedName("id")
+    val id: Int? = null
 )

@@ -6,6 +6,14 @@
 
     <string name="screen_does_not_implement_yet">This screen does not implement yet!</string>
 
+    <!-- Dates Strings -->
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="tomorrow">Tomorrow</string>
+
+    <string name="select_date">Select date</string>
+    <string name="select_time">Select a time</string>
+
     <!-- Common Errors -->
     <string name="no_network_error">No network available. Please check your connection</string>
     <string name="internal_error">Internal error. Please try again later</string>
@@ -31,19 +39,20 @@
     <string name="email_incorrect">Enter valid email address</string>
     <string name="username_already_found">Username already found. Please choose new username</string>
 
-    <!-- Tasks -->
-    <string name="add_task_description">Add Task</string>
-
     <!-- Add Task -->
     <string name="new_task">New Task</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="due_date">Due Date</string>
+    <string name="due_time">Due Time</string>
     <string name="create_task">Create</string>
     <string name="title_empty_error">Title cannot be empty</string>
 
     <!-- Edit Task -->
     <string name="edit_task">Edit Task</string>
-    <string name="delete_task">Delete</string>
-    <string name="update_task">Update</string>
-    <string name="cancel_edit_task">Cancel</string>
+    <string name="message_dialog_delete_task">Are you sure you want to delete task?</string>
+
+    <!-- Buttons -->
+    <string name="delete_button_name">Delete</string>
+    <string name="cancel_button_name">Cancel</string>
 </resources>

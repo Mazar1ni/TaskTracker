@@ -10,6 +10,10 @@ data class TasksEntity(
     val title: String,
     @ColumnInfo(name = DESCRIPTION_FIELD_NAME)
     val description: String,
+    @ColumnInfo(name = DUE_DATE_FIELD_NAME)
+    val dueDate: Long?,
+    @ColumnInfo(name = HAS_TIME_FIELD_NAME)
+    val hasTime: Boolean,
     @ColumnInfo(name = UUID_FIELD_NAME)
     val uuid: String,
     @ColumnInfo(name = TIMESTAMP_FIELD_NAME)
@@ -23,6 +27,8 @@ data class TasksEntity(
         const val TITLE_FIELD_NAME = "title"
         const val DESCRIPTION_FIELD_NAME = "description"
         const val TIMESTAMP_FIELD_NAME = "timestamp"
+        const val DUE_DATE_FIELD_NAME = "due_date"
+        const val HAS_TIME_FIELD_NAME = "has_time"
         const val UUID_FIELD_NAME = "uuid"
         const val COMPLETED_FIELD_NAME = "completed"
         const val SYNCHRONIZED_FIELD_NAME = "synchronized"

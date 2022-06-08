@@ -7,6 +7,10 @@ data class TaskDto(
     val title: String,
     @SerializedName("description")
     val description: String,
+    @SerializedName("due_date")
+    val dueDate: Long?,
+    @SerializedName("has_time")
+    val hasTime: Boolean,
     @SerializedName("uuid")
     val uuid: String,
     @SerializedName("timestamp")

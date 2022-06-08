@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.mazar1ni.tasktracker.core.util.Utils
 import com.github.mazar1ni.tasktracker.tasks.domain.models.TaskDomainModel
 import com.github.mazar1ni.tasktracker.tasks.domain.states.EditTaskState
 import com.github.mazar1ni.tasktracker.tasks.domain.use_case.DeleteTaskUseCase
@@ -29,6 +30,9 @@ class EditTaskViewModel @Inject constructor(
 
     private var title = ""
     private var description = ""
+    var dueDate: Long? = null
+    var dueHour: Int? = null
+    var dueMinute: Int? = null
 
     val titleWatcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -55,6 +59,14 @@ class EditTaskViewModel @Inject constructor(
     fun getTaskByUUID(id: Int) {
         viewModelScope.launch {
             getTaskByIdUseCase(id)?.let { task ->
+                dueDate = task.dueDate
+                dueDate?.let {
+                    if (task.hasTime) {
+                        val localDate = Utils.getLocalDateTimeFromEpoch(it)
+                        dueHour = localDate.hour
+                        dueMinute = localDate.minute
+                    }
+                }
                 _taskDomainModel.value = task
             }
         }
@@ -72,10 +84,23 @@ class EditTaskViewModel @Inject constructor(
     fun saveEditTask() {
         _taskDomainModel.value?.let {
             CoroutineScope(Dispatchers.IO).launch {
-                if (title != it.title || description != it.description) {
+
+                val newDateTime = dueDate?.run {
+                    Utils.localDateTimeToEpoch(this, dueHour, dueMinute)
+                }
+
+                val newHasTime = dueHour != null && dueMinute != null
+
+                if (title != it.title ||
+                    description != it.description ||
+                    newDateTime != it.dueDate ||
+                    it.hasTime != newHasTime
+                ) {
                     saveEditTaskUseCase(it.apply {
                         title = this@EditTaskViewModel.title
                         description = this@EditTaskViewModel.description
+                        dueDate = newDateTime
+                        hasTime = newHasTime
                     })
                     stateAction?.invoke(EditTaskState.EditTaskStateSuccess)
                 }

@@ -10,6 +10,8 @@ object TaskMapper {
         TaskDomainModel(
             tasksEntity.title,
             tasksEntity.description,
+            tasksEntity.dueDate,
+            tasksEntity.hasTime,
             tasksEntity.uuid,
             tasksEntity.timestamp,
             tasksEntity.isCompleted,
@@ -21,16 +23,20 @@ object TaskMapper {
         TasksEntity(
             taskDomainModel.title,
             taskDomainModel.description,
+            taskDomainModel.dueDate,
+            taskDomainModel.hasTime,
             taskDomainModel.uuid,
             taskDomainModel.timestamp,
             taskDomainModel.isCompleted,
-            taskDomainModel.synchronized
+            taskDomainModel.isSynchronized
         ).apply { id = taskDomainModel.id }
 
     fun dtoToDomain(taskDto: TaskDto) =
         TaskDomainModel(
             taskDto.title,
             taskDto.description,
+            taskDto.dueDate,
+            taskDto.hasTime,
             taskDto.uuid,
             taskDto.timestamp,
             taskDto.isCompleted
@@ -40,6 +46,8 @@ object TaskMapper {
         TaskDto(
             taskDomainModel.title,
             taskDomainModel.description,
+            taskDomainModel.dueDate,
+            taskDomainModel.hasTime,
             taskDomainModel.uuid,
             taskDomainModel.timestamp,
             taskDomainModel.isCompleted

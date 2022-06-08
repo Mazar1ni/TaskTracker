@@ -54,15 +54,16 @@ abstract class TasksDao : BaseDao<TasksEntity>(TABLE_NAME) {
             SimpleSQLiteQuery(
                 "WITH new (${TasksEntity.TITLE_FIELD_NAME}, ${TasksEntity.DESCRIPTION_FIELD_NAME}, " +
                         "${TasksEntity.TIMESTAMP_FIELD_NAME}, ${TasksEntity.UUID_FIELD_NAME}, " +
-                        "${TasksEntity.COMPLETED_FIELD_NAME}, ${TasksEntity.SYNCHRONIZED_FIELD_NAME}) " +
-                        "AS ( VALUES ${
+                        "${TasksEntity.COMPLETED_FIELD_NAME}, ${TasksEntity.SYNCHRONIZED_FIELD_NAME}, " +
+                        "${TasksEntity.DUE_DATE_FIELD_NAME}, ${TasksEntity.HAS_TIME_FIELD_NAME}) AS ( VALUES ${
                             tasks.joinToString(
                                 prefix = "",
                                 postfix = "",
                                 separator = ",",
                                 transform = {
                                     "(\"${it.title}\", \"${it.description}\", ${it.timestamp}, " +
-                                            "\"${it.uuid}\", ${if (it.isCompleted) 1 else 0}, 1)"
+                                            "\"${it.uuid}\", ${if (it.isCompleted) 1 else 0}, 1, " +
+                                            "${it.dueDate}, ${if (it.hasTime) 1 else 0})"
                                 }
                             )
                         } ) " +
@@ -70,13 +71,15 @@ abstract class TasksDao : BaseDao<TasksEntity>(TABLE_NAME) {
                         "INSERT or REPLACE INTO $tableName (${BaseEntity.ID_FIELD_NAME}, " +
                         "${TasksEntity.TITLE_FIELD_NAME}, ${TasksEntity.DESCRIPTION_FIELD_NAME}, " +
                         "${TasksEntity.TIMESTAMP_FIELD_NAME}, ${TasksEntity.UUID_FIELD_NAME}, " +
-                        "${TasksEntity.COMPLETED_FIELD_NAME}, ${TasksEntity.SYNCHRONIZED_FIELD_NAME}) " +
+                        "${TasksEntity.COMPLETED_FIELD_NAME}, ${TasksEntity.SYNCHRONIZED_FIELD_NAME}, " +
+                        "${TasksEntity.DUE_DATE_FIELD_NAME}, ${TasksEntity.HAS_TIME_FIELD_NAME}) " +
 
                         "SELECT old.${BaseEntity.ID_FIELD_NAME}, new.${TasksEntity.TITLE_FIELD_NAME}, " +
                         "new.${TasksEntity.DESCRIPTION_FIELD_NAME}, new.${TasksEntity.TIMESTAMP_FIELD_NAME}, " +
                         "new.${TasksEntity.UUID_FIELD_NAME}, new.${TasksEntity.COMPLETED_FIELD_NAME}, " +
-                        "new.${TasksEntity.SYNCHRONIZED_FIELD_NAME} FROM new LEFT JOIN $tableName " +
-                        "AS old ON new.${TasksEntity.UUID_FIELD_NAME} = old.${TasksEntity.UUID_FIELD_NAME}"
+                        "new.${TasksEntity.SYNCHRONIZED_FIELD_NAME}, new.${TasksEntity.DUE_DATE_FIELD_NAME}, " +
+                        "new.${TasksEntity.HAS_TIME_FIELD_NAME} FROM new LEFT JOIN $tableName AS old ON " +
+                        "new.${TasksEntity.UUID_FIELD_NAME} = old.${TasksEntity.UUID_FIELD_NAME}"
             )
         )
 }
