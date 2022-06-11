@@ -12,8 +12,6 @@ import com.github.mazar1ni.tasktracker.core.util.NavigationUtil
 import com.github.mazar1ni.tasktracker.core.util.Utils
 import com.github.mazar1ni.tasktracker.databinding.FragmentAddTaskBinding
 import com.github.mazar1ni.tasktracker.tasks.domain.states.AddTaskState
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.timepicker.MaterialTimePicker
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -42,48 +40,36 @@ class AddTaskFragment : Fragment() {
             viewModel.description = it.toString()
         }
 
-        binding.dueDateEditText.setOnClickListener {
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText(R.string.select_date)
-                    .setSelection(viewModel.dueDate ?: MaterialDatePicker.todayInUtcMilliseconds())
-                    .build()
-            datePicker.addOnPositiveButtonClickListener {
-                binding.dueTimeField.visibility = View.VISIBLE
-                binding.dateClearIcon.visibility = View.VISIBLE
+        binding.datePicker.fragmentManager = parentFragmentManager
+        binding.timePicker.fragmentManager = parentFragmentManager
 
-                viewModel.dueDate = it
-                binding.dueDateEditText.setText(Utils.getStringOfDay(it, requireContext()))
-            }
-            datePicker.show(parentFragmentManager, null)
+        clearTimeTextField()
+
+        binding.datePicker.selectionDateTime = viewModel.dueDate
+        binding.datePicker.datePickerPositiveAction = {
+            binding.timePicker.setDateTimeFieldVisibility(true)
+            binding.datePicker.setClearIconVisibility(true)
+
+            viewModel.dueDate = it
+
+            binding.datePicker.setDateTimeTextVisibility(Utils.getStringOfDay(it, requireContext()))
         }
-
-        binding.dateClearIcon.setOnClickListener {
+        binding.datePicker.clearButtonClickedAction = {
             clearDateTextField()
             clearTimeTextField()
         }
 
-        binding.dueTimeEditText.setOnClickListener {
-            val timePicker =
-                MaterialTimePicker.Builder()
-                    .setTitleText(R.string.select_time)
-                    .setHour(viewModel.dueHour ?: 0)
-                    .setMinute(viewModel.dueMinute ?: 0)
-                    .build()
-            timePicker.addOnPositiveButtonClickListener {
-                binding.timeClearIcon.visibility = View.VISIBLE
+        binding.timePicker.selectionHourTime = viewModel.dueHour
+        binding.timePicker.selectionMinuteTime = viewModel.dueMinute
+        binding.timePicker.timePickerPositiveAction = { hour, minute ->
+            binding.timePicker.setClearIconVisibility(true)
 
-                viewModel.dueHour = timePicker.hour
-                viewModel.dueMinute = timePicker.minute
+            viewModel.dueHour = hour
+            viewModel.dueMinute = minute
 
-                binding.dueTimeEditText.setText(
-                    Utils.getTimeFormat(timePicker.hour, timePicker.minute)
-                )
-            }
-            timePicker.show(parentFragmentManager, null)
+            binding.timePicker.setDateTimeTextVisibility(Utils.getTimeFormat(hour, minute))
         }
-
-        binding.timeClearIcon.setOnClickListener {
+        binding.timePicker.clearButtonClickedAction = {
             clearTimeTextField()
         }
 
@@ -116,16 +102,16 @@ class AddTaskFragment : Fragment() {
     }
 
     private fun clearTimeTextField() {
-        binding.dueTimeField.visibility = View.GONE
-        binding.timeClearIcon.visibility = View.GONE
-        binding.dueTimeEditText.text = null
+        binding.timePicker.setDateTimeFieldVisibility(false)
+        binding.timePicker.setClearIconVisibility(false)
+        binding.timePicker.setDateTimeTextVisibility(null)
         viewModel.dueHour = null
         viewModel.dueMinute = null
     }
 
     private fun clearDateTextField() {
-        binding.dueDateEditText.text = null
-        binding.dateClearIcon.visibility = View.GONE
+        binding.datePicker.setClearIconVisibility(false)
+        binding.datePicker.setDateTimeTextVisibility(null)
         viewModel.dueDate = null
     }
 }

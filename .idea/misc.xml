@@ -18,6 +18,7 @@
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/drawable/logo.xml" value="0.213" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/activity_main.xml" value="0.24954710144927536" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/all_tasks_view.xml" value="0.2630208333333333" />
+        <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/custom_date_time_view.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/date_picker_view.xml" value="0.20572916666666666" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_add_task.xml" value="0.2640625" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_dashboard.xml" value="0.27291666666666664" />
@@ -27,7 +28,7 @@
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_notifications.xml" value="0.27291666666666664" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_register.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_splash.xml" value="0.27291666666666664" />
-        <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_tasks.xml" value="0.22" />
+        <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/fragment_tasks.xml" value="0.25" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/progress_dialog.xml" value="0.18697916666666667" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/layout/task_view.xml" value="0.5" />
         <entry key="..\:/Projects/TaskTracker/app/src/main/res/menu/bottom_nav_menu.xml" value="0.18802083333333333" />
