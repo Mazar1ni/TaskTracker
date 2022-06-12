@@ -1,5 +1,7 @@
 package com.github.mazar1ni.tasktracker.tasks.presentation.tasks_list
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mazar1ni.tasktracker.tasks.domain.states.TasksState
@@ -17,6 +19,9 @@ class TasksViewModel @Inject constructor(
 
     var stateAction: ((TasksState) -> Unit)? = null
 
+    var taskListAdapter: TaskListAdapter? = null
+        private set
+
     fun updateListTasks(force: Boolean = false) {
         stateAction?.invoke(TasksState.TasksInProgress)
         viewModelScope.launch {
@@ -29,5 +34,10 @@ class TasksViewModel @Inject constructor(
         viewModelScope.launch {
             stateAction?.invoke(completeTaskUseCase(taskId, isChecked))
         }
+    }
+
+    fun setupAdapter(context: Context) {
+        if (taskListAdapter == null)
+            taskListAdapter = TaskListAdapter(context)
     }
 }

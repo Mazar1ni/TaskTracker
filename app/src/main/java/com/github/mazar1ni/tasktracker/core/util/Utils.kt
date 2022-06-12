@@ -10,6 +10,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 object Utils {
 
@@ -27,6 +28,45 @@ object Utils {
             context.getString(R.string.yesterday)
         else
             getDateFormat(date)
+
+    fun getStringOfDayFoTaskList(date: Long, context: Context): String {
+        if (date < System.currentTimeMillis())
+            return context.getString(R.string.overdue)
+
+        if (DateUtils.isToday(date))
+            return context.getString(R.string.today)
+
+        if (DateUtils.isToday(date - DateUtils.DAY_IN_MILLIS))
+            return context.getString(R.string.tomorrow)
+
+        val calendar = Calendar.getInstance()
+        val currentWeek = calendar.get(Calendar.WEEK_OF_YEAR)
+        calendar.set(Calendar.DAY_OF_WEEK, 7)
+
+        if (date < calendar.time.time)
+            return context.getString(R.string.this_week)
+
+        calendar.set(Calendar.WEEK_OF_YEAR, currentWeek + 1)
+        calendar.set(Calendar.DAY_OF_WEEK, 7)
+
+        if (date < calendar.time.time)
+            return context.getString(R.string.next_week)
+
+        val monthCalendar = Calendar.getInstance()
+        monthCalendar.set(Calendar.DAY_OF_MONTH, 1)
+        monthCalendar.add(Calendar.MONTH, 1)
+        monthCalendar.add(Calendar.DAY_OF_MONTH, -1)
+
+        if (date < monthCalendar.time.time)
+            return context.getString(R.string.this_month)
+
+        monthCalendar.add(Calendar.MONTH, 1)
+
+        if (date < monthCalendar.time.time)
+            return context.getString(R.string.next_month)
+
+        return context.getString(R.string.later)
+    }
 
     fun localDateTimeToEpoch(date: Long, dueHour: Int?, dueMinute: Int?) =
         getLocalDateTimeFromEpoch(date).withHour(dueHour ?: 0)

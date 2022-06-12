@@ -1,4 +1,4 @@
-package com.github.mazar1ni.tasktracker.tasks.presentation
+package com.github.mazar1ni.tasktracker.tasks.presentation.custom_views
 
 import android.content.Context
 import android.util.AttributeSet

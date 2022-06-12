@@ -4,77 +4,207 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.BaseExpandableListAdapter
+import com.github.mazar1ni.tasktracker.R
+import com.github.mazar1ni.tasktracker.core.util.Utils
+import com.github.mazar1ni.tasktracker.databinding.TaskGroupViewBinding
 import com.github.mazar1ni.tasktracker.databinding.TaskViewBinding
 import com.github.mazar1ni.tasktracker.tasks.domain.models.TaskDomainModel
 
 class TaskListAdapter(private val context: Context) :
-    RecyclerView.Adapter<TaskListAdapter.CustomViewHolder>() {
+    BaseExpandableListAdapter() {
 
-    private val tasksList = mutableListOf<TaskDomainModel>()
+    private val tasksDictionaryList = mutableMapOf<String, MutableList<TaskDomainModel>>(
+        context.getString(R.string.overdue) to mutableListOf(),
+        context.getString(R.string.today) to mutableListOf(),
+        context.getString(R.string.tomorrow) to mutableListOf(),
+        context.getString(R.string.this_week) to mutableListOf(),
+        context.getString(R.string.next_week) to mutableListOf(),
+        context.getString(R.string.this_month) to mutableListOf(),
+        context.getString(R.string.next_month) to mutableListOf(),
+        context.getString(R.string.later) to mutableListOf()
+    )
+
+    private val filteredTasksDictionaryList = mutableMapOf<String, MutableList<TaskDomainModel>>()
 
     var clickAction: ((Int) -> Unit)? = null
     var doneAction: ((Int, Boolean) -> Unit)? = null
 
-    inner class CustomViewHolder(val binding: TaskViewBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    @SuppressLint("NotifyDataSetChanged")
+    fun add(tasks: List<TaskDomainModel>) {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): CustomViewHolder {
-        val binding = TaskViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CustomViewHolder(binding)
-    }
+        tasksDictionaryList.forEach {
+            it.value.clear()
+        }
 
-    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        holder.itemView.apply {
-            tasksList[position].let { task ->
-                holder.binding.title.text = task.title
-                holder.binding.description.text = task.description
-                holder.binding.completeButton.setOnClickListener {
-                    // TODO: add sound and animation
-                    if (task.id == null) {
-                        // TODO: show internal error
-                    } else {
-                        doneAction?.invoke(task.id, holder.binding.completeButton.isChecked)
-                    }
-                }
-                holder.binding.taskLayout.setOnClickListener {
-                    if (task.id == null) {
-                        // TODO: show internal error
-                    } else {
-                        clickAction?.invoke(task.id)
-                    }
-                }
-
-                holder.binding.completeButton.isChecked = task.isCompleted
-                if (task.isCompleted) {
-                    if (!holder.binding.title.paint.isStrikeThruText)
-                        holder.binding.title.paintFlags =
-                            holder.binding.title.paintFlags + Paint.STRIKE_THRU_TEXT_FLAG
-                    if (!holder.binding.description.paint.isStrikeThruText)
-                        holder.binding.description.paintFlags =
-                            holder.binding.description.paintFlags + Paint.STRIKE_THRU_TEXT_FLAG
-                } else {
-                    if (holder.binding.title.paint.isStrikeThruText)
-                        holder.binding.title.paintFlags =
-                            holder.binding.title.paintFlags - Paint.STRIKE_THRU_TEXT_FLAG
-                    if (holder.binding.description.paint.isStrikeThruText)
-                        holder.binding.description.paintFlags =
-                            holder.binding.description.paintFlags - Paint.STRIKE_THRU_TEXT_FLAG
+        tasks.forEach { task ->
+            if (task.dueDate == null) {
+                tasksDictionaryList[context.getString(R.string.no_date)]?.add(task)
+            } else {
+                task.dueDate?.let {
+                    tasksDictionaryList[Utils.getStringOfDayFoTaskList(it, context)]?.add(task)
                 }
             }
         }
+
+        tasksDictionaryList.forEach {
+            if (it.value.isNotEmpty())
+                filteredTasksDictionaryList[it.key] = it.value
+        }
+
+        notifyDataSetChanged()
     }
 
-    override fun getItemCount() = tasksList.size
+    override fun getGroupCount() = filteredTasksDictionaryList.keys.count()
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun add(tasks: List<TaskDomainModel>) {
-        tasksList.clear()
-        tasksList.addAll(tasks)
-        notifyDataSetChanged()
+    override fun getChildrenCount(groupId: Int): Int {
+        filteredTasksDictionaryList.keys.forEachIndexed { index, key ->
+            if (index == groupId)
+                return filteredTasksDictionaryList[key]?.size ?: 0
+        }
+        return 0
+    }
+
+    override fun getGroup(groupId: Int): Any {
+        filteredTasksDictionaryList.keys.forEachIndexed { index, key ->
+            if (index == groupId)
+                return key
+        }
+        return ""
+    }
+
+    override fun getChild(groupId: Int, childId: Int): Any {
+        filteredTasksDictionaryList.keys.forEachIndexed { index, key ->
+            if (index == groupId)
+                return filteredTasksDictionaryList[key]?.get(childId)?.title ?: ""
+        }
+        return 0
+    }
+
+    override fun getGroupId(groupId: Int): Long {
+        return groupId.toLong()
+    }
+
+    override fun getChildId(groupId: Int, childId: Int): Long {
+        return childId.toLong()
+    }
+
+    override fun hasStableIds(): Boolean {
+        return true
+    }
+
+    override fun getGroupView(
+        groupId: Int,
+        isExpanded: Boolean,
+        view: View?,
+        viewGroup: ViewGroup?
+    ): View {
+        val binding = TaskGroupViewBinding.inflate(LayoutInflater.from(context))
+
+        filteredTasksDictionaryList.keys.forEachIndexed { index, key ->
+            if (index == groupId) {
+                binding.taskGroupTitle.text = key
+                if (key == context.getString(R.string.overdue))
+                    binding.taskGroupTitle.setTextColor(context.getColor(R.color.red))
+            }
+        }
+
+        return binding.root
+    }
+
+    override fun getChildView(
+        groupId: Int,
+        childId: Int,
+        isExpanded: Boolean,
+        view: View?,
+        viewGroup: ViewGroup?
+    ): View {
+
+        val binding = TaskViewBinding.inflate(LayoutInflater.from(context))
+
+        filteredTasksDictionaryList.keys.forEachIndexed { index, s ->
+            if (index == groupId) {
+                val task = filteredTasksDictionaryList[s]?.get(childId)
+                task?.let {
+
+                    binding.title.text = task.title
+                    if (task.description.isEmpty())
+                        binding.description.visibility = View.GONE
+                    else {
+                        binding.description.text = task.description
+                        binding.description.visibility = View.VISIBLE
+                    }
+
+                    if (task.dueDate == null)
+                        binding.date.visibility = View.GONE
+                    else {
+                        binding.date.text = task.dueDate?.let { date ->
+
+                            var formattedDate = Utils.getDateFormat(date)
+
+                            if (task.hasTime) {
+                                val localDate = Utils.getLocalDateTimeFromEpoch(date)
+                                formattedDate += ", ${
+                                    Utils.getTimeFormat(
+                                        localDate.hour,
+                                        localDate.minute
+                                    )
+                                }"
+                            }
+
+                            if (date < System.currentTimeMillis())
+                                binding.date.setTextColor(context.getColor(R.color.red))
+                            else
+                                binding.date.setTextColor(context.getColor(R.color.black))
+
+                            formattedDate
+                        }
+                        binding.date.visibility = View.VISIBLE
+                    }
+
+                    binding.completeButton.setOnClickListener {
+                        // TODO: add sound and animation
+                        if (task.id == null) {
+                            // TODO: show internal error
+                        } else {
+                            doneAction?.invoke(task.id, binding.completeButton.isChecked)
+                        }
+                    }
+                    binding.taskLayout.setOnClickListener {
+                        if (task.id == null) {
+                            // TODO: show internal error
+                        } else {
+                            clickAction?.invoke(task.id)
+                        }
+                    }
+
+                    binding.completeButton.isChecked = task.isCompleted
+                    if (task.isCompleted) {
+                        if (!binding.title.paint.isStrikeThruText)
+                            binding.title.paintFlags =
+                                binding.title.paintFlags + Paint.STRIKE_THRU_TEXT_FLAG
+                        if (!binding.description.paint.isStrikeThruText)
+                            binding.description.paintFlags =
+                                binding.description.paintFlags + Paint.STRIKE_THRU_TEXT_FLAG
+                    } else {
+                        if (binding.title.paint.isStrikeThruText)
+                            binding.title.paintFlags =
+                                binding.title.paintFlags - Paint.STRIKE_THRU_TEXT_FLAG
+                        if (binding.description.paint.isStrikeThruText)
+                            binding.description.paintFlags =
+                                binding.description.paintFlags - Paint.STRIKE_THRU_TEXT_FLAG
+                    }
+
+                }
+            }
+        }
+
+        return binding.root
+    }
+
+    override fun isChildSelectable(groupId: Int, childId: Int): Boolean {
+        return true
     }
 }

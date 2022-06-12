@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.activityViewModels
 import com.github.mazar1ni.tasktracker.R
 import com.github.mazar1ni.tasktracker.core.util.NavigationUtil
 import com.github.mazar1ni.tasktracker.databinding.FragmentTasksBinding
@@ -19,12 +18,10 @@ import javax.inject.Inject
 class TasksFragment : Fragment() {
 
     private lateinit var binding: FragmentTasksBinding
-    private val viewModel: TasksViewModel by viewModels()
+    private val viewModel: TasksViewModel by activityViewModels()
 
     @Inject
     lateinit var navigationUtil: NavigationUtil
-
-    private val taskListAdapter by lazy { TaskListAdapter(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +30,10 @@ class TasksFragment : Fragment() {
     ): View {
         binding = FragmentTasksBinding.inflate(inflater)
 
-        binding.tasksList.apply {
-            layoutManager = LinearLayoutManager(requireActivity())
-            adapter = taskListAdapter
-        }
+        if (viewModel.taskListAdapter == null)
+            viewModel.setupAdapter(requireContext())
+
+        binding.tasksList.setAdapter(viewModel.taskListAdapter)
 
         binding.floatingActionButton.setOnClickListener {
             navigationUtil.navigate(TasksFragmentDirections.actionNavigationTasksToFragmentAddTask())
@@ -46,7 +43,7 @@ class TasksFragment : Fragment() {
             viewModel.updateListTasks(true)
         }
 
-        taskListAdapter.clickAction = { taskId ->
+        viewModel.taskListAdapter?.clickAction = { taskId ->
             navigationUtil.navigate(
                 TasksFragmentDirections.actionNavigationTasksToFragmentEditTask(
                     taskId
@@ -54,7 +51,7 @@ class TasksFragment : Fragment() {
             )
         }
 
-        taskListAdapter.doneAction = { taskId, isChecked ->
+        viewModel.taskListAdapter?.doneAction = { taskId, isChecked ->
             viewModel.completeTask(taskId, isChecked)
         }
 
@@ -65,7 +62,7 @@ class TasksFragment : Fragment() {
                 }
                 TasksState.TasksListEmpty -> {
                     binding.refreshLayout.isRefreshing = false
-                    taskListAdapter.add(listOf())
+                    viewModel.taskListAdapter?.add(listOf())
                     // TODO: show icon that no tasks today
                 }
                 TasksState.TasksNetworkConnectionError -> {
@@ -83,7 +80,9 @@ class TasksFragment : Fragment() {
                 is TasksState.TasksSuccess -> {
                     binding.refreshLayout.isRefreshing = false
                     state.tasks?.let {
-                        taskListAdapter.add(it.sortedBy { task -> task.isCompleted })
+                        viewModel.taskListAdapter?.add(it.sortedBy { task -> task.dueDate })
+                        for (i in 0..binding.tasksList.adapter.count)
+                            binding.tasksList.expandGroup(i)
                     }
                 }
                 TasksState.TasksCompletedSuccess -> {
@@ -94,6 +93,9 @@ class TasksFragment : Fragment() {
         }
 
         viewModel.updateListTasks()
+
+        for (i in 0..binding.tasksList.adapter.count)
+            binding.tasksList.expandGroup(i)
 
         return binding.root
     }

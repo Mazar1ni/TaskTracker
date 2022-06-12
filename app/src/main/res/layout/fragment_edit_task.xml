@@ -52,7 +52,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.github.mazar1ni.tasktracker.tasks.presentation.CustomDateTimeView
+    <com.github.mazar1ni.tasktracker.tasks.presentation.custom_views.CustomDateTimeView
         android:id="@+id/datePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginBottom="20dp" />
 
-    <com.github.mazar1ni.tasktracker.tasks.presentation.CustomDateTimeView
+    <com.github.mazar1ni.tasktracker.tasks.presentation.custom_views.CustomDateTimeView
         android:id="@+id/timePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
