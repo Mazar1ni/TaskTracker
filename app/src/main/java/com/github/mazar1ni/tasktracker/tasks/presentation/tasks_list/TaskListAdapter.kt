@@ -24,7 +24,8 @@ class TaskListAdapter(private val context: Context) :
         context.getString(R.string.next_week) to mutableListOf(),
         context.getString(R.string.this_month) to mutableListOf(),
         context.getString(R.string.next_month) to mutableListOf(),
-        context.getString(R.string.later) to mutableListOf()
+        context.getString(R.string.later) to mutableListOf(),
+        context.getString(R.string.finished) to mutableListOf()
     )
 
     private val filteredTasksDictionaryList = mutableMapOf<String, MutableList<TaskDomainModel>>()
@@ -40,7 +41,9 @@ class TaskListAdapter(private val context: Context) :
         }
 
         tasks.forEach { task ->
-            if (task.dueDate == null) {
+            if (task.isCompleted) {
+                tasksDictionaryList[context.getString(R.string.finished)]?.add(task)
+            } else if (task.dueDate == null) {
                 tasksDictionaryList[context.getString(R.string.no_date)]?.add(task)
             } else {
                 task.dueDate?.let {
